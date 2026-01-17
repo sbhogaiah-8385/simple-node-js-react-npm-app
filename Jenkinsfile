@@ -1,18 +1,29 @@
 pipeline {
-    agent none
+    agent {
+        docker {
+            image 'node:lts-buster-slim'
+            args '-p 3000:3000'
+        }
+    }
+    environment {
+        CI = 'true'
+    }
     stages {
-        stage('Example Build') {
-            agent { docker 'maven:3.9.9-eclipse-temurin-21' }
+        stage('Build') {
             steps {
-                echo 'Hello, Maven'
-                sh 'mvn --version'
+                sh 'npm install'
             }
         }
-        stage('Example Test') {
-            agent { docker 'openjdk:21-jre' }
+        stage('Test') {
             steps {
-                echo 'Hello, JDK'
-                sh 'java -version'
+                sh './jenkins/scripts/test.sh'
+            }
+        }
+        stage('Deliver') {
+            steps {
+                sh './jenkins/scripts/deliver.sh'
+                input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                sh './jenkins/scripts/kill.sh'
             }
         }
     }
