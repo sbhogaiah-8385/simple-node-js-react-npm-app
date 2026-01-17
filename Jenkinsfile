@@ -1,21 +1,18 @@
 pipeline {
-    agent any
+    agent none
     stages {
-        stage('Build') {
+        stage('Example Build') {
+            agent { docker 'maven:3.9.9-eclipse-temurin-21' }
             steps {
-                sh 'npm install'
+                echo 'Hello, Maven'
+                sh 'mvn --version'
             }
         }
-        stage('Test') {
+        stage('Example Test') {
+            agent { docker 'openjdk:21-jre' }
             steps {
-                sh './jenkins/scripts/test.sh'
-            }
-        }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
-                input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                sh './jenkins/scripts/kill.sh'
+                echo 'Hello, JDK'
+                sh 'java -version'
             }
         }
     }
