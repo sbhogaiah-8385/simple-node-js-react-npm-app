@@ -34,7 +34,7 @@ pipeline {
                     // Stop old container if it exists
                     sh 'docker rm -f ${CONTAINER_NAME} || echo "No container to remove"'
                     // Run new container
-                    sh 'docker run -d --name ${CONTAINER_NAME} -p 5000:5000 ${IMAGE_NAME}'
+                    sh 'docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${IMAGE_NAME}'
                 }
             }
         }
@@ -42,7 +42,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ Deployment successful! Visit http://localhost:5000'
+            echo '✅ Deployment successful! Visit http://localhost:3000'
         }
         failure {
             echo '❌ Pipeline failed!'
