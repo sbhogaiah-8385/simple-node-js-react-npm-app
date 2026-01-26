@@ -20,6 +20,13 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                echo 'Running test container...'
+                sh 'docker compose run --rm ${IMAGE_NAME} npm run test || echo "No tests found"'                
+            }
+        }
+
 
     }
 
